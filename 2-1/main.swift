@@ -140,8 +140,77 @@ class Client {
         self.name = name
         self.balance = balance
     }
+    func showInfo () {
+        print(id, ".", name, "-", balance, "сом")
+    }
 }
-let clietJibek = Client(id: 01625, name: "Kyzjibek", balance: 15000)
+
+let clientJibek = Client(id: 01625, name: "Kyzjibek", balance: 15000)
 let clientNurs = Client(id: 01823, name: "Nursultan", balance: 26000)
 
+class Bank {
+    var name: String = ""
+    var address: String = ""
+    var clientArray: [Client] = []
+    var transferSum: Int = 0
+    
+    init(name: String, address: String) {
+        self.name = name
+        self.address = address
+    }
+    func addClient(client: Client) {
+        clientArray.append(client)
+    }
+    func clientCount(){
+        print("количество клиентов - ", clientArray.count)
+    }
+    func showBalanceByName(name: String){
+        var indexClient: Int? = nil
+        for (index, item) in clientArray.enumerated(){
+            if item.name == name{
+                indexClient = index
+            }
+        }
+        if indexClient != nil{
+            print(clientArray[indexClient!].balance, "сом")
+        }
+    }
+    func showBalanceByID(id: Int){
+        var indexClient: Int? = nil
+        for (index, item) in clientArray.enumerated(){
+            if item.id == id{
+                indexClient = index
+            }
+        }
+        if indexClient != nil{
+            print(clientArray[indexClient!].balance, "сом")
+        }
+    }
+    func transfer(from: String, sum: Int, to: String) {
+        var indexFrom: Int? = nil
+        var indexTo: Int? = nil
+        for (index, item) in clientArray.enumerated() {
+            if item.name == from {
+                indexFrom = index
+            }
+            if item.name == to {
+                indexTo = index
+            }
+        }
+        if indexFrom != nil && indexTo != nil{
+            clientArray[indexFrom!].balance -= sum
+            clientArray[indexTo!].balance += sum
+            print("Transfer successful \nFrom - \(clientArray[indexFrom!].name) \nTo - \(clientArray[indexTo!].name) \nSum - \(sum) som")
+        }
+    }
+}
+
+let bakai = Bank(name: "Bakai Bank", address: "Moskovskaya 45")
+
+bakai.addClient(client: clientNurs)
+bakai.addClient(client: clientJibek)
+bakai.clientCount()                                                 //количество клиентов -  2
+bakai.transfer(from: "Nursultan", sum: 6000, to: "Kyzjibek")        //Transfer successful From - Nursultan To -                                                                             Kyzjibek Sum - 6000 som
+bakai.showBalanceByID(id: 01625)                                    //21000 сом
+bakai.showBalanceByName(name: "Nursultan")                          //20000 сом
 
